@@ -1,10 +1,7 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import * as schema from './schema';
-import { env } from '$env/dynamic/private';
+import { SUPABASE_ANON_KEY, SUPABASE_PUBLIC_URL } from '$env/static/private';
+import { createClient } from '@supabase/supabase-js';
+import type { Database } from './types/supabase';
 
-if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
-
-const client = postgres(env.DATABASE_URL);
-
-export const db = drizzle(client, { schema });
+export const supabase = createClient<Database>(SUPABASE_PUBLIC_URL, SUPABASE_ANON_KEY, {
+	auth: { persistSession: false }
+});
