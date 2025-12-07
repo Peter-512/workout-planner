@@ -21,30 +21,24 @@
 
 <div class="min-h-screen w-full px-4 py-6">
 	<div class="max-w-md mx-auto flex flex-col gap-3">
-		{#if workouts?.length}
-			{#each workouts as w}
-				<Card class="p-4 shadow-sm">
-					<div class="flex items-start justify-between gap-3">
-						<div class="flex-1">
-							<h2 class="text-base font-semibold ">{w.title}</h2>
-							<div class="mt-2 flex items-center gap-2 text-xs ">
-								<span class="font-medium">{stars(w.intensity)}</span>
-								<span aria-hidden="true">•</span>
-								<span>{formatDuration(w.duration)}</span>
-								{#if w.type}
-									<span aria-hidden="true">•</span>
-									<span class="capitalize">{w.type}</span>
-								{/if}
-							</div>
+		{#each workouts as w}
+			<Card target="_blank" href={w.url} class="p-4 shadow-sm">
+				<div class="flex items-start justify-between gap-3">
+					<div class="flex-1">
+						<h2 class="text-base font-semibold ">{w.title}</h2>
+						<div class="mt-2 flex items-center gap-2 text-xs">
+							<span class="font-medium">{stars(w.intensity)}</span>
+							<span aria-hidden="true">•</span>
+							<span>{formatDuration(w.duration)}</span>
+							<span aria-hidden="true">•</span>
+							<span class="capitalize">{w.type}</span>
 						</div>
-						{#if thumbnailUrl(w.url)}
-							<img src={thumbnailUrl(w.videoId)} alt="YouTube thumbnail" class="w-20 h-14 rounded object-cover" loading="lazy" />
-						{/if}
 					</div>
-				</Card>
-			{/each}
+					<img src={thumbnailUrl(w.videoId)} alt="YouTube thumbnail" class="w-20 h-14 rounded object-cover" loading="lazy" />
+				</div>
+			</Card>
 		{:else}
 			<Card class="p-6 text-center text-sm ">No workouts yet</Card>
-		{/if}
+		{/each}
 	</div>
 </div>
