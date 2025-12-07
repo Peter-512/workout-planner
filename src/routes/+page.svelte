@@ -3,6 +3,8 @@
 	import { Button } from '$lib/components/ui/button';
 </script>
 
+<Button href="workouts" class="fixed top-4 right-4" variant="secondary">Workouts</Button>
+
 <Card class="w-full max-w-sm mx-auto shadow-lg">
 	<div class="p-6 text-center">
 		<h1 class="text-2xl font-bold mb-2">Welcome to Workout Planner</h1>

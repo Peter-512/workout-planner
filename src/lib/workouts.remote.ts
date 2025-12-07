@@ -1,8 +1,9 @@
-import { form } from '$app/server';
+import { form, query } from '$app/server';
 import { z } from 'zod';
 import { YOUTUBE_API_KEY } from '$env/static/private';
 import { error, redirect } from '@sveltejs/kit';
 import { supabase } from './server/db';
+import type { Database } from '$lib/types/supabase.ts';
 
 // Helper: extract YouTube video ID from various URL formats
 function extractYouTubeId(url: string): string | null {
@@ -88,7 +89,7 @@ export const createWorkout = form(
 		};
 		console.log(enriched);
 
-		const { data, error: dbError } = await supabase.from('workout').insert({ ...enriched });
+		const { error: dbError } = await supabase.from('workout').insert({ ...enriched });
 		if (dbError) {
 			error(500, `Database error: ${dbError.message}`);
 		}
@@ -96,3 +97,17 @@ export const createWorkout = form(
 		redirect(303, '/');
 	}
 );
+
+type Workout = Database['public']['Tables']['workout']['Row'];
+export const getWorkouts = query(async (): Promise<Workout[]> => {
+	const { data, error: dbError } = await supabase
+		.from('workout')
+		.select('*')
+		.order('created_at', { ascending: false });
+
+	if (dbError) {
+		error(500, `Database error: ${dbError.message}`);
+	}
+
+	return data;
+});

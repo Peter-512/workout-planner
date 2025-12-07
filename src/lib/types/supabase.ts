@@ -236,6 +236,7 @@ export type Database = {
           title: string
           type: string | null
           url: string
+          videoId: string
         }
         Insert: {
           created_at?: string
@@ -245,6 +246,7 @@ export type Database = {
           title: string
           type?: string | null
           url: string
+          videoId: string
         }
         Update: {
           created_at?: string
@@ -254,6 +256,7 @@ export type Database = {
           title?: string
           type?: string | null
           url?: string
+          videoId?: string
         }
         Relationships: []
       }
