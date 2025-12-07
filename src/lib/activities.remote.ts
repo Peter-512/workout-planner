@@ -50,3 +50,16 @@ export const getTodaysActivity = query(async (): Promise<ActivityWithWorkout | n
 
 	return data;
 });
+
+export const getActivities = query(async (): Promise<ActivityWithWorkout> => {
+	const { data, error: dbError } = await supabase
+		.from('workout_activity')
+		.select('workout_id, date, workout(id, title, url, videoId, duration, type, intensity)')
+		.order('date', { ascending: false });
+
+	if (dbError) {
+		error(400, dbError.message);
+	}
+
+	return data;
+});
