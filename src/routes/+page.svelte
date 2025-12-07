@@ -6,8 +6,6 @@
 	import { formatDuration, stars, thumbnailUrl } from '$lib/utils';
 
 	const activity = await getTodaysActivity();
-
-	$inspect(activity);
 </script>
 
 <Button href="workouts" class="fixed top-4 right-4" variant="secondary">Workouts</Button>

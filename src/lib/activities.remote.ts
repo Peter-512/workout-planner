@@ -1,7 +1,6 @@
 import { form, query } from '$app/server';
 import { z } from 'zod';
 import { supabase } from './server/db';
-import type { Database } from '$lib/types/supabase.ts';
 import { error, redirect } from '@sveltejs/kit';
 import type { ActivityWithWorkout } from '$lib/types/index.ts';
 
@@ -36,9 +35,8 @@ export const createActivities = form(createActivitiesSchema, async ({ date, ids 
 	redirect(303, '/');
 });
 
-export const getTodaysActivity = query(async (): Promise<ActivityWithWorkout> => {
+export const getTodaysActivity = query(async (): Promise<ActivityWithWorkout | null> => {
 	const today = new Date().toISOString().split('T')[0];
-	console.log(today);
 
 	const { data, error: dbError } = await supabase
 		.from('workout_activity')
