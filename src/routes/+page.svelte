@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Card } from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
+	import { Origami } from '@lucide/svelte';
 
 	import { getTodaysActivity } from '$lib/activities.remote';
 	import { formatDuration, stars, thumbnailUrl } from '$lib/utils';
@@ -35,7 +36,8 @@
 				</Button>
 			</div>
 		{:else}
-			<div class="mt-2 border-t pt-4 text-center text-sm ">It's a rest day today 😌</div>
+			<div class="text-center text-sm">It's a rest day today 😌</div>
+			<Origami size="100" class="m-auto mt-4" />
 		{/if}
 	</div>
 </Card>
