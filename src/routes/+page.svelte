@@ -2,6 +2,7 @@
 	import { Card } from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import { Origami } from '@lucide/svelte';
+	import { page } from '$app/state';
 
 	import { getTodaysActivity } from '$lib/activities.remote';
 	import { formatDuration, stars, thumbnailUrl } from '$lib/utils';
@@ -9,6 +10,7 @@
 	const activity = await getTodaysActivity();
 </script>
 
+<Button href={`webcal://${page.url.host}/calendar.ics`} class="fixed top-4 left-4" variant="outline">Subscribe</Button>
 <Button href="workouts" class="fixed top-4 right-4" variant="secondary">Workouts</Button>
 
 <Card class="w-full max-w-sm mx-auto shadow-lg">
