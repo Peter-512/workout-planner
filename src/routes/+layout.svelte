@@ -9,4 +9,6 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-{@render children()}
+<main class="min-h-screen min-w-full flex flex-col items-center justify-center">
+	{@render children()}
+</main>
