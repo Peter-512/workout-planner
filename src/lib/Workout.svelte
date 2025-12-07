@@ -13,11 +13,11 @@
 		<div class="flex-1">
 			<h2 class="text-base font-semibold ">{title}</h2>
 			<div class="mt-2 flex items-center gap-2 text-xs">
-				<span class="font-medium">{stars(intensity)}</span>
+				<span class="font-medium text-yellow-400">{stars(intensity)}</span>
 				<span aria-hidden="true">•</span>
 				<span>{formatDuration(duration)}</span>
 				<span aria-hidden="true">•</span>
-				<span class="capitalize">{type}</span>
+				<span class="capitalize text-primary">{type}</span>
 			</div>
 		</div>
 		<img src={thumbnailUrl(videoId)} alt="YouTube thumbnail" class="w-20 h-14 rounded object-cover" loading="lazy" />

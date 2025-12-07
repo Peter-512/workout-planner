@@ -1,8 +1,9 @@
-import { form } from '$app/server';
+import { form, query } from '$app/server';
 import { z } from 'zod';
 import { supabase } from './server/db';
 import type { Database } from '$lib/types/supabase.ts';
 import { error, redirect } from '@sveltejs/kit';
+import type { ActivityWithWorkout } from '$lib/types/index.ts';
 
 const createActivitiesSchema = z.object({
 	date: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date format' }),
@@ -23,7 +24,7 @@ export const createActivities = form(createActivitiesSchema, async ({ date, ids 
 
 	const rows = workoutIds.map((workout_id, i) => ({
 		workout_id,
-		date: addDays(startDate, i)
+		date: addDays(startDate, i + 1)
 	}));
 
 	const { error: dbError } = await supabase.from('workout_activity').insert(rows);
@@ -33,4 +34,21 @@ export const createActivities = form(createActivitiesSchema, async ({ date, ids 
 	}
 
 	redirect(303, '/');
+});
+
+export const getTodaysActivity = query(async (): Promise<ActivityWithWorkout> => {
+	const today = new Date().toISOString().split('T')[0];
+	console.log(today);
+
+	const { data, error: dbError } = await supabase
+		.from('workout_activity')
+		.select('workout_id, date, workout(id, title, url, videoId, duration, type, intensity)')
+		.eq('date', today)
+		.maybeSingle();
+
+	if (dbError) {
+		error(400, dbError.message);
+	}
+
+	return data;
 });
