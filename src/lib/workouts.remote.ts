@@ -98,7 +98,6 @@ export const createWorkout = form(
 	}
 );
 
-type Workout = Database['public']['Tables']['workout']['Row'];
 export const getWorkouts = query(async (): Promise<Workout[]> => {
 	const { data, error: dbError } = await supabase
 		.from('workout')
