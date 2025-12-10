@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { YOUTUBE_API_KEY } from '$env/static/private';
 import { error, redirect } from '@sveltejs/kit';
 import { supabase } from './server/db';
-import type { Database } from '$lib/types/supabase.ts';
+import type { Workout } from '$lib/types';
 
 // Helper: extract YouTube video ID from various URL formats
 function extractYouTubeId(url: string): string | null {
@@ -54,7 +54,7 @@ async function getYouTubeVideoInfo(videoId: string) {
 	const res = await fetch(url);
 	if (!res.ok) {
 		const text = await res.text();
-		error(`YouTube API error ${res.status}: ${text}`);
+		error(503, `YouTube API error ${res.status}: ${text}`);
 	}
 	const json = await res.json();
 	const item = json.items?.[0];

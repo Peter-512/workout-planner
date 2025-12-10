@@ -2,7 +2,7 @@ import { form, query } from '$app/server';
 import { z } from 'zod';
 import { supabase } from './server/db';
 import { error, redirect } from '@sveltejs/kit';
-import type { ActivityWithWorkout } from '$lib/types/index.ts';
+import type { ActivityWithWorkout } from '$lib/types';
 
 const createActivitiesSchema = z.object({
 	date: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date format' }),
