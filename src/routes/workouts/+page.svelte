@@ -8,7 +8,7 @@
 
 <div class="min-h-screen w-full px-4 py-6">
 	<div class="max-w-md mx-auto flex flex-col gap-3">
-		{#each workouts as workout}
+		{#each workouts as { id, ...workout } (id)}
 			<Workout {...workout} />
 		{:else}
 			<Card class="p-6 text-center text-sm ">No workouts yet</Card>
