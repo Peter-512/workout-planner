@@ -1,4 +1,4 @@
-import type { Database } from 'supabase.ts';
+import type { Database } from './supabase';
 
 export type Workout = Database['public']['Tables']['workout']['Row'];
 

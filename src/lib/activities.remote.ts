@@ -1,4 +1,4 @@
-import { form, query } from '$app/server';
+import { form, getRequestEvent, query } from '$app/server';
 import { z } from 'zod';
 import { supabase } from './server/db';
 import { error, redirect } from '@sveltejs/kit';
@@ -35,7 +35,7 @@ export const createActivities = form(createActivitiesSchema, async ({ date, ids 
 	redirect(303, '/');
 });
 
-export const getTodaysActivity = query(async (): Promise<ActivityWithWorkout | null> => {
+export const getTodaysActivity = query<ActivityWithWorkout | null>(async () => {
 	const today = new Date().toISOString().split('T')[0];
 
 	const { data, error: dbError } = await supabase
@@ -51,7 +51,7 @@ export const getTodaysActivity = query(async (): Promise<ActivityWithWorkout | n
 	return data;
 });
 
-export const getActivities = query(async (): Promise<ActivityWithWorkout> => {
+export const getActivities = query<ActivityWithWorkout[]>(async () => {
 	const { data, error: dbError } = await supabase
 		.from('workout_activity')
 		.select('workout_id, date, workout(id, title, url, videoId, duration, type, intensity)')

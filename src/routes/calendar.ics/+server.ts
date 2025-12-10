@@ -1,5 +1,5 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import { getActivities } from '$lib/activities.remote.ts';
+import { getActivities } from '$lib/activities.remote';
 
 function icsEscape(value: string): string {
 	return value
