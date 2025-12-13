@@ -51,6 +51,7 @@
 		"vite-plugin-devtools-json": "^1.0.0"
 	},
 	"dependencies": {
+		"@neoconfetti/svelte": "^2.2.2",
 		"@supabase/supabase-js": "^2.86.2",
 		"zod": "^4.1.13"
 	}

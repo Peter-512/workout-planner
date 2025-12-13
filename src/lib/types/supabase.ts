@@ -262,18 +262,21 @@ export type Database = {
       }
       workout_activity: {
         Row: {
+          completed: boolean
           created_at: string
           date: string
           id: number
           workout_id: number
         }
         Insert: {
+          completed?: boolean
           created_at?: string
           date: string
           id?: number
           workout_id: number
         }
         Update: {
+          completed?: boolean
           created_at?: string
           date?: string
           id?: number

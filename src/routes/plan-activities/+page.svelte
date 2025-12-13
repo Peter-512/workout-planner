@@ -44,24 +44,24 @@
 </Popover.Root>
 
 <div class="mt-4 max-w-md mx-auto flex flex-col gap-2">
-	{#each workouts as { url, ...w }, i}
-		{@const idx = selectedIds.indexOf(w.id)}
+	{#each workouts as { id, url, ...workout }, i (id)}
+		{@const idx = selectedIds.indexOf(id)}
 		{@const isSelected = idx !== -1}
 		<div class={cn("relative", i === workouts.length - 1 ? "mb-24" : "")}>
 			<Workout
 				onclick={() => {
 					if (idx === -1) {
-						selectedIds = [...selectedIds, w.id]
+						selectedIds = [...selectedIds, id]
 					}
 					else {
-						selectedIds = selectedIds.filter((id) => id !== w.id)
+						selectedIds = selectedIds.filter((id) => id !== id)
 					}
 				}}
 				class={cn(
 					"cursor-pointer rounded border p-3 text-sm mx-4",
 					isSelected ? "border-blue-500" : "border-gray-200"
 				)}
-				{...w}
+				{...workout}
 			/>
 
 			{#if isSelected}
@@ -77,7 +77,7 @@
 
 <form {...createActivities} class="fixed inset-x-0 bottom-0 z-20 backdrop-blur px-4 pt-2 pb-[calc(env(safe-area-inset-bottom)+0.75rem)]">
 	<input type="hidden" name="date" value={date ? date.toDate(getLocalTimeZone()).toISOString() : ''} />
-	{#each selectedIds as id}
+	{#each selectedIds as id (id)}
 		<input type="hidden" name="ids[]" value={`${id}`} />
 	{/each}
 	<Button type="submit" class="w-full">Plan workouts</Button>

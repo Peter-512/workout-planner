@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@neoconfetti/svelte':
+        specifier: ^2.2.2
+        version: 2.2.2(svelte@5.45.5)
       '@supabase/supabase-js':
         specifier: ^2.86.2
         version: 2.86.2
@@ -388,6 +391,11 @@ packages:
     resolution: {integrity: sha512-9f9O6uxng2pLB01sxNySHduJN3HTl5p0HDu4H26VR51vhZfiMzyOMe9Mhof3XAk4l813eTtl+/DYRvGyoRR+yw==}
     peerDependencies:
       svelte: ^5
+
+  '@neoconfetti/svelte@2.2.2':
+    resolution: {integrity: sha512-E7xCFVEEm5Ctnj2udTJy1b9oaTvjz1zi1mYdEtE8rB5BVwq6kHisosDS+zdWN5PMfEMjtbsOV9Cl6tsNSAD1sA==}
+    peerDependencies:
+      svelte: ^3.0.0 || ^4.0.0 || ^5.0.0
 
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
@@ -1943,6 +1951,10 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.5
 
   '@lucide/svelte@0.544.0(svelte@5.45.5)':
+    dependencies:
+      svelte: 5.45.5
+
+  '@neoconfetti/svelte@2.2.2(svelte@5.45.5)':
     dependencies:
       svelte: 5.45.5
 

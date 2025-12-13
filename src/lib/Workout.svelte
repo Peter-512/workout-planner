@@ -5,7 +5,7 @@
 	import type { ClassValue } from 'clsx';
 	import type { ComponentProps } from 'svelte';
 
-	let { title, intensity, duration, type, videoId, url, class: className, ...props }: Omit<Workout, 'id'> & {class?: ClassValue | null | undefined} & ComponentProps<typeof Card> = $props();
+	let { title, intensity, duration, type, videoId, url, class: className, ...props }: Omit<Workout, 'id' | 'url'> & {url?: Workout['url']} & {class?: ClassValue | null | undefined} & ComponentProps<typeof Card> = $props();
 </script>
 
 <Card target="_blank" href={url} class={cn('p-4 shadow-sm', className)} {...props}>
