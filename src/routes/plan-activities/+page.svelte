@@ -51,10 +51,10 @@
 			<Workout
 				onclick={() => {
 					if (idx === -1) {
-						selectedIds = [...selectedIds, id]
+						selectedIds.push(id)
 					}
 					else {
-						selectedIds = selectedIds.filter((id) => id !== id)
+						selectedIds.splice(idx, 1)
 					}
 				}}
 				class={cn(

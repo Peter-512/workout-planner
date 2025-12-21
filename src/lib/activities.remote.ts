@@ -35,14 +35,13 @@ export const createActivities = form(createActivitiesSchema, async ({ date, ids 
 	redirect(303, '/');
 });
 
-export const getTodaysActivity = query<ActivityWithWorkout | null>(async () => {
+export const getTodaysActivities = query<ActivityWithWorkout[] | null>(async () => {
 	const today = new Date().toISOString().split('T')[0];
 
 	const { data, error: dbError } = await supabase
 		.from('workout_activity')
 		.select('*, workout(*)')
-		.eq('date', today)
-		.maybeSingle();
+		.eq('date', today);
 
 	if (dbError) {
 		error(400, dbError.message);
@@ -64,17 +63,15 @@ export const getActivities = query<ActivityWithWorkout[]>(async () => {
 	return data;
 });
 
-export const completeActivity = command(async () => {
-	const today = new Date().toISOString().split('T')[0];
-
+export const completeActivity = command(z.number(), async (id) => {
 	const { error: dbError } = await supabase
 		.from('workout_activity')
 		.update({ completed: true })
-		.eq('date', today);
+		.eq('id', id);
 
 	if (dbError) {
 		error(400, dbError.message);
 	}
 
-	void getTodaysActivity().refresh();
+	void getTodaysActivities().refresh();
 });
