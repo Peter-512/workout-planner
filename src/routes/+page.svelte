@@ -21,11 +21,11 @@
 <Carousel orientation="vertical">
 	<CarouselContent class="max-h-[500px]">
 		{#each activities as activity (activity.id)}
-			<CarouselItem>
+			<CarouselItem class="mx-auto">
 				{#if activity?.workout && !activity.completed}
 					<div class="fade-out-0 flex items-center h-[500px]">
 						<Card.Root>
-							<Card.Content class="max-w-sm shadow-lg">
+							<Card.Content class="max-w-sm">
 								<div class="px-6">
 									<div class="flex items-start gap-3">
 										<div class="flex-1">
@@ -61,16 +61,14 @@
 						</Card.Root>
 					</div>
 				{:else if activity?.completed}
-					<CarouselItem class="mx-auto">
 						<div class="fade-in flex items-center h-[500px]">
 							<Card.Root>
-								<Card.Content class="max-w-sm shadow-lg px-6">
+								<Card.Content class="max-w-sm px-6">
 									<div class="text-center text-sm">You completed your activity for today! 🎉</div>
 									<PartyPopper size="100" class="m-auto mt-4" />
 								</Card.Content>
 							</Card.Root>
 						</div>
-					</CarouselItem>
 				{/if}
 			</CarouselItem>
 		{:else}

@@ -17,8 +17,14 @@
 		dateStyle: "long",
 	});
 
+
 	let date = $state<DateValue>();
 	let open = $state(false);
+
+	let dateIso = $derived(date ? date.toDate(getLocalTimeZone()).toISOString() : null);
+	let newDate = $derived(new Date(dateIso ?? ''));
+
+	$inspect({localTZ: getLocalTimeZone(), date: date?.toDate(getLocalTimeZone()), dateString: date?.toDate(getLocalTimeZone()).toString(), iso: dateIso, newDate});
 
 	const workouts = await getWorkouts()
 
