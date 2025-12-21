@@ -11,19 +11,13 @@ const createActivitiesSchema = z.object({
 		.min(1, { message: 'At least one activity ID is required' })
 });
 
-const addDays = (date: Date, days: number) => {
-	const next = new Date(date);
-	next.setDate(next.getDate() + days);
-	return next;
-};
-
 export const createActivities = form(createActivitiesSchema, async ({ date, ids }) => {
-	const startDate = new Date(date);
+	const activityDate = new Date(date);
 	const workoutIds = ids.map((id) => Number(id));
 
 	const rows = workoutIds.map((workout_id, i) => ({
 		workout_id,
-		date: addDays(startDate, i + 1)
+		date: activityDate
 	}));
 
 	const { error: dbError } = await supabase.from('workout_activity').insert(rows);
