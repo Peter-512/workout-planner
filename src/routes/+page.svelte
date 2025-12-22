@@ -2,10 +2,9 @@
 	import * as Card from '$lib/components/ui/card';
 	import {
 		CarouselItem,
-		CarouselNext,
 		Carousel,
 		CarouselContent,
-		CarouselPrevious
+		CarouselButtons
 	} from '$lib/components/ui/carousel';
 	import { Button } from '$lib/components/ui/button';
 	import { Origami, PartyPopper } from '@lucide/svelte';
@@ -107,8 +106,7 @@
 		{/each}
 	</CarouselContent>
 	{#if activities && activities.length > 1}
-		<CarouselPrevious />
-		<CarouselNext />
+		<CarouselButtons />
 	{/if}
 </Carousel>
 
