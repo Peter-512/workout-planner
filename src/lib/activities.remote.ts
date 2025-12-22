@@ -39,7 +39,8 @@ export const getTodaysActivities = query<ActivityWithWorkout[] | null>(async () 
 	const { data, error: dbError } = await supabase
 		.from('workout_activity')
 		.select('*, workout(*)')
-		.eq('date', today);
+		.eq('date', today)
+		.order('id');
 
 	if (dbError) {
 		error(400, dbError.message);
