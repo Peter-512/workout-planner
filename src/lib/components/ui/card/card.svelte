@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { HTMLAnchorAttributes, HTMLAttributes } from 'svelte/elements';
-	import { cn, type WithElementRef } from "$lib/utils.js";
+	import { cn, type WithElementRef } from '$lib/utils.js';
 
 	let {
 		ref = $bindable(null),
@@ -8,15 +8,17 @@
 		href = undefined,
 		children,
 		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLDivElement>> & WithElementRef<HTMLAnchorAttributes> = $props();
+	}: WithElementRef<HTMLAttributes<HTMLDivElement>> &
+		WithElementRef<HTMLAnchorAttributes> = $props();
 </script>
 
 {#if href}
-	<a href={href}
+	<a
+		{href}
 		bind:this={ref}
 		data-slot="card"
 		class={cn(
-			"bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+			'bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm',
 			className
 		)}
 		{...restProps}
@@ -28,7 +30,7 @@
 		bind:this={ref}
 		data-slot="card"
 		class={cn(
-			"bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+			'bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm',
 			className
 		)}
 		{...restProps}
