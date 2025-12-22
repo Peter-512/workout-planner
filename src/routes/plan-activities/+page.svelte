@@ -82,7 +82,7 @@
 </div>
 
 <form {...createActivities} class="fixed inset-x-0 bottom-0 z-20 backdrop-blur px-4 pt-2 pb-[calc(env(safe-area-inset-bottom)+0.75rem)]">
-	<input type="hidden" name="date" value={date ? date.toDate(getLocalTimeZone()).toISOString() : ''} />
+	<input type="hidden" name="date" value={date ? date.toString() : ''} />
 	{#each selectedIds as id (id)}
 		<input type="hidden" name="ids[]" value={`${id}`} />
 	{/each}

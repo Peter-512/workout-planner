@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { supabase } from './server/db';
 import { error, redirect } from '@sveltejs/kit';
 import type { ActivityWithWorkout } from '$lib/types';
-import { fromDate, getLocalTimeZone, toCalendarDate } from '@internationalized/date';
 
 const createActivitiesSchema = z.object({
 	date: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date format' }),
@@ -13,15 +12,11 @@ const createActivitiesSchema = z.object({
 });
 
 export const createActivities = form(createActivitiesSchema, async ({ date, ids }) => {
-	const calendarDate = toCalendarDate(fromDate(new Date(date), getLocalTimeZone()));
-	const activityDate = `${calendarDate.year}-${String(calendarDate.month).padStart(2, '0')}-${String(
-		calendarDate.day
-	).padStart(2, '0')}`;
 	const workoutIds = ids.map((id) => Number(id));
 
 	const rows = workoutIds.map((workout_id) => ({
 		workout_id,
-		date: activityDate
+		date
 	}));
 
 	const { error: dbError } = await supabase.from('workout_activity').insert(rows);
