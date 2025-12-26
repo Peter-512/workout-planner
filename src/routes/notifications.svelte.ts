@@ -2,6 +2,13 @@ import { PUBLIC_VAPID_PUBLIC_KEY } from '$env/static/public';
 import type { PushSubscription as WebPushSubscription } from 'web-push';
 import { subscribeToNotifications } from '$lib/notifications.remote';
 
+export const notificationsSupported =
+	typeof window !== 'undefined' &&
+	'Notification' in window &&
+	typeof Notification?.requestPermission === 'function' &&
+	'serviceWorker' in navigator &&
+	'PushManager' in window;
+
 export const subscribeAfterPermission = async () => {
 	const reg = await navigator.serviceWorker.ready;
 

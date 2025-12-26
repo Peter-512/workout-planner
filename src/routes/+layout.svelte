@@ -1,12 +1,12 @@
 <script lang="ts">
 	import './layout.css';
 	import favicon from '$lib/assets/lightning.svg';
-	import { subscribeAfterPermission } from './notifications.svelte';
+	import { notificationsSupported, subscribeAfterPermission } from './notifications.svelte';
 
 	let { children } = $props();
 
 	$effect(() => {
-		if (Notification.permission === 'default') {
+		if (notificationsSupported && Notification.permission === 'default') {
 			Notification.requestPermission().then((permission) => {
 				if (permission === 'granted') {
 					subscribeAfterPermission();
