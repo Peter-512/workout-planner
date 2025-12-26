@@ -14,18 +14,7 @@
 	});
 
 	let date = $state<DateValue>();
-	let open = $state(false);
-
-	let dateIso = $derived(date ? date.toDate(getLocalTimeZone()).toISOString() : null);
-	let newDate = $derived(new Date(dateIso ?? ''));
-
-	$inspect({
-		localTZ: getLocalTimeZone(),
-		date: date?.toDate(getLocalTimeZone()),
-		dateString: date?.toDate(getLocalTimeZone()).toString(),
-		iso: dateIso,
-		newDate
-	});
+	let open = $state(true);
 
 	const workouts = await getWorkouts();
 
@@ -43,6 +32,7 @@
 	</Popover.Trigger>
 	<Popover.Content class="w-auto p-0">
 		<Calendar
+			weekStartsOn={1}
 			onValueChange={() => (open = false)}
 			minValue={today(getLocalTimeZone())}
 			bind:value={date}
