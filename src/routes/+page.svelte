@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { PUBLIC_VAPID_PUBLIC_KEY } from '$env/static/public';
 	import * as Card from '$lib/components/ui/card';
 	import {
 		CarouselItem,
@@ -11,46 +10,12 @@
 	import { Origami, PartyPopper } from '@lucide/svelte';
 	import { page } from '$app/state';
 	import { confetti } from '@neoconfetti/svelte';
-	import type { PushSubscription as WebPushSubscription } from 'web-push';
 
 	import { completeActivity, getTodaysActivities } from '$lib/activities.remote';
 	import { formatDuration, stars, thumbnailUrl } from '$lib/utils';
-	import { subscribeToNotifications } from '$lib/subscribe.remote';
 
 	const activities = $derived(await getTodaysActivities());
 	let confettiContainer = $state<HTMLDivElement>();
-
-	const subscribeAfterPermission = async () => {
-		const reg = await navigator.serviceWorker.ready;
-
-		const existing = await reg.pushManager.getSubscription();
-		const subscription =
-			existing ??
-			(await reg.pushManager.subscribe({
-				userVisibleOnly: true,
-				applicationServerKey: PUBLIC_VAPID_PUBLIC_KEY
-			}));
-
-		const pushSubscription: WebPushSubscription = {
-			endpoint: subscription.endpoint,
-			expirationTime: subscription.expirationTime,
-			keys: {
-				p256dh: btoa(String.fromCharCode(...new Uint8Array(subscription.getKey('p256dh')!))),
-				auth: btoa(String.fromCharCode(...new Uint8Array(subscription.getKey('auth')!)))
-			}
-		};
-		await subscribeToNotifications(pushSubscription);
-	};
-
-	$effect(() => {
-		if (Notification.permission === 'default') {
-			Notification.requestPermission().then((permission) => {
-				if (permission === 'granted') {
-					subscribeAfterPermission();
-				}
-			});
-		}
-	});
 </script>
 
 <div class="absolute top-10" bind:this={confettiContainer}></div>

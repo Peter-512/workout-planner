@@ -1,8 +1,19 @@
 <script lang="ts">
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
+	import { subscribeAfterPermission } from './notifications.svelte';
 
 	let { children } = $props();
+
+	$effect(() => {
+		if (Notification.permission === 'default') {
+			Notification.requestPermission().then((permission) => {
+				if (permission === 'granted') {
+					subscribeAfterPermission();
+				}
+			});
+		}
+	});
 </script>
 
 <svelte:head>
