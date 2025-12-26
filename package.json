@@ -5,6 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "supabase start && vite dev",
+		"dev:mobile": "supabase start && vite dev --host 0.0.0.0",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",

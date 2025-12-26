@@ -22,6 +22,19 @@
 <Button href={`webcal://${page.url.host}/calendar.ics`} class="fixed top-4 left-4" variant="outline"
 	>Subscribe</Button
 >
+{#if Notification && Notification.permission !== 'granted'}
+	<Button
+		class="fixed top-4 right-30"
+		onclick={() => {
+			Notification.requestPermission().then((permission) => {
+				if (permission === 'granted') {
+					console.log('Notification permission granted.');
+				}
+				console.log('Notification permission status:', permission);
+			});
+		}}>Enable Notification</Button
+	>
+{/if}
 <Button href="workouts" class="fixed top-4 right-4" variant="secondary">Workouts</Button>
 
 <Carousel orientation="vertical">

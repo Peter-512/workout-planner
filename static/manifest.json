@@ -1,0 +1,41 @@
+{
+  "name": "Workout Planner",
+  "short_name": "Workouts",
+  "description": "Plan workouts and get reminders.",
+  "start_url": "/",
+  "scope": "/",
+	"id": "/",
+  "display": "standalone",
+  "background_color": "#09090B",
+  "theme_color": "#FF2157",
+  "icons": [
+    {
+      "src": "/icons/lightning.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/lightning.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop.png",
+      "type": "image/png",
+      "sizes": "1203x816",
+      "form_factor": "wide",
+      "label": "Desktop view"
+    },
+    {
+      "src": "/screenshots/mobile.png",
+      "type": "image/png",
+      "sizes": "331x716",
+      "label": "Mobile view"
+    }
+  ]
+}
+

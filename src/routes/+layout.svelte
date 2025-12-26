@@ -6,6 +6,13 @@
 	let { children } = $props();
 
 	$effect(() => {
+		const serviceWorkerInNavigator = 'serviceWorker' in navigator;
+		const pushManagerInWindow = 'PushManager' in window;
+		console.log({
+			permission: Notification.permission,
+			serviceWorkerInNavigator,
+			pushManagerInWindow
+		});
 		if (notificationsSupported && Notification.permission === 'default') {
 			Notification.requestPermission().then((permission) => {
 				if (permission === 'granted') {
@@ -18,6 +25,10 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
+	<title>Workout Planner</title>
+	<link rel="manifest" href="/manifest.json" />
+	<link rel="apple-touch-icon" href={favicon} />
+	<meta name="theme-color" content="#0ea5e9" />
 </svelte:head>
 
 <main class="min-h-screen min-w-full flex flex-col items-center justify-center">
