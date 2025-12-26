@@ -13,7 +13,7 @@
 
 	import { completeActivity, getTodaysActivities } from '$lib/activities.remote';
 	import { formatDuration, stars, thumbnailUrl } from '$lib/utils';
-	import { subscribeAfterPermission } from './notifications.svelte';
+	import { notificationsSupported, subscribeAfterPermission } from './notifications.svelte';
 
 	const activities = $derived(await getTodaysActivities());
 	let confettiContainer = $state<HTMLDivElement>();
@@ -23,10 +23,13 @@
 <Button href={`webcal://${page.url.host}/calendar.ics`} class="fixed top-4 left-4" variant="outline"
 	>Subscribe</Button
 >
-{#if Notification && Notification.permission !== 'granted'}
+{#if notificationsSupported && Notification.permission !== 'granted'}
 	<Button
 		class="fixed top-4 right-30"
 		onclick={() => {
+			if (!notificationsSupported) {
+				return;
+			}
 			Notification.requestPermission().then((permission) => {
 				if (permission === 'granted') {
 					subscribeAfterPermission();
