@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { VAPID_PRIVATE_KEY } from '$env/static/private';
 import { PUBLIC_VAPID_PUBLIC_KEY } from '$env/static/public';
 import { dev } from '$app/environment';
-import favicon from '$lib/assets/favicon.svg';
+import favicon from '$lib/assets/lightning.svg';
 
 const url = dev
 	? 'mailto:peter.buschenreiter@gmail.com'
