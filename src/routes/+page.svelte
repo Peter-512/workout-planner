@@ -13,6 +13,7 @@
 
 	import { completeActivity, getTodaysActivities } from '$lib/activities.remote';
 	import { formatDuration, stars, thumbnailUrl } from '$lib/utils';
+	import { subscribeAfterPermission } from './notifications.svelte';
 
 	const activities = $derived(await getTodaysActivities());
 	let confettiContainer = $state<HTMLDivElement>();
@@ -28,12 +29,13 @@
 		onclick={() => {
 			Notification.requestPermission().then((permission) => {
 				if (permission === 'granted') {
-					console.log('Notification permission granted.');
+					subscribeAfterPermission();
 				}
-				console.log('Notification permission status:', permission);
 			});
-		}}>Enable Notification</Button
+		}}
 	>
+		Enable Notification
+	</Button>
 {/if}
 <Button href="workouts" class="fixed top-4 right-4" variant="secondary">Workouts</Button>
 

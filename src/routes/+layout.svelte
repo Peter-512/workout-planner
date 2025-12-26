@@ -6,13 +6,6 @@
 	let { children } = $props();
 
 	$effect(() => {
-		const serviceWorkerInNavigator = 'serviceWorker' in navigator;
-		const pushManagerInWindow = 'PushManager' in window;
-		console.log({
-			permission: Notification.permission,
-			serviceWorkerInNavigator,
-			pushManagerInWindow
-		});
 		if (notificationsSupported && Notification.permission === 'default') {
 			Notification.requestPermission().then((permission) => {
 				if (permission === 'granted') {
