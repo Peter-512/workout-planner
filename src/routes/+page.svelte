@@ -8,38 +8,18 @@
 	} from '$lib/components/ui/carousel';
 	import { Button } from '$lib/components/ui/button';
 	import { Origami, PartyPopper } from '@lucide/svelte';
-	import { page } from '$app/state';
 	import { confetti } from '@neoconfetti/svelte';
 
 	import { completeActivity, getTodaysActivities } from '$lib/activities.remote';
 	import { formatDuration, stars, thumbnailUrl } from '$lib/utils';
-	import { notificationsSupported, subscribeAfterPermission } from './notifications.svelte';
+	import Drawer from './Drawer.svelte';
 
 	const activities = $derived(await getTodaysActivities());
 	let confettiContainer = $state<HTMLDivElement>();
 </script>
 
 <div class="absolute top-10" bind:this={confettiContainer}></div>
-<Button href={`webcal://${page.url.host}/calendar.ics`} class="fixed top-4 left-4" variant="outline"
-	>Subscribe</Button
->
-{#if notificationsSupported && Notification.permission !== 'granted'}
-	<Button
-		class="fixed top-4 right-30"
-		onclick={() => {
-			if (!notificationsSupported) {
-				return;
-			}
-			Notification.requestPermission().then((permission) => {
-				if (permission === 'granted') {
-					subscribeAfterPermission();
-				}
-			});
-		}}
-	>
-		Enable Notification
-	</Button>
-{/if}
+<Drawer />
 <Button href="workouts" class="fixed top-4 right-4" variant="secondary">Workouts</Button>
 
 <Carousel orientation="vertical">
