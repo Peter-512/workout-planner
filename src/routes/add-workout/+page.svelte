@@ -13,7 +13,7 @@
 			required
 		/>
 	</label>
-	{#each createWorkout.fields.url.issues() as issue}
+	{#each createWorkout.fields.url.issues() as issue (issue.message)}
 		<p class="issue">{issue.message}</p>
 	{/each}
 
@@ -33,7 +33,7 @@
 		</select>
 	</label>
 
-	{#each createWorkout.fields.intensity.issues() as issue}
+	{#each createWorkout.fields.intensity.issues() as issue (issue.message)}
 		<p class="issue">{issue.message}</p>
 	{/each}
 
@@ -51,7 +51,7 @@
 		</select>
 	</label>
 
-	{#each createWorkout.fields.type.issues() as issue}
+	{#each createWorkout.fields.type.issues() as issue (issue.message)}
 		<p class="issue">{issue.message}</p>
 	{/each}
 
