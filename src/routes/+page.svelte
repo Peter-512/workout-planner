@@ -110,7 +110,7 @@
 			</CarouselItem>
 		{:else}
 			<CarouselItem class="mx-auto">
-				<div>
+				<div class="flex items-center h-[500px]">
 					<Card.Root>
 						<Card.Content class="w-full max-w-sm shadow-lg px-6">
 							<div class="text-center text-sm">It's a rest day today 😌</div>
