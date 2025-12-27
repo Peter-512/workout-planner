@@ -1,14 +1,20 @@
 <script lang="ts">
 	import { Slider as SliderPrimitive } from 'bits-ui';
 	import { cn, type WithoutChildrenOrChild } from '$lib/utils.js';
+	import { Goal } from '@lucide/svelte';
+
+	type SliderProps = WithoutChildrenOrChild<SliderPrimitive.RootProps> & {
+		goal?: number;
+	};
 
 	let {
 		ref = $bindable(null),
 		value = $bindable(),
 		orientation = 'horizontal',
+		goal,
 		class: className,
 		...restProps
-	}: WithoutChildrenOrChild<SliderPrimitive.RootProps> = $props();
+	}: SliderProps = $props();
 </script>
 
 <!--
@@ -49,12 +55,25 @@ get along, so we shut typescript up by casting `value` to `never`.
 			/>
 		{/each}
 		{#each tickItems as { index, value } (index)}
-			<SliderPrimitive.Tick {index} class="dark:bg-background z-1 h-px w-4" />
+			{@const tickLabel = `${value} ${orientation === 'vertical' ? (value === 1 ? 'day' : 'days') : 'd'}`}
+			{@const isGoalTick = goal !== undefined && value === goal}
+			<SliderPrimitive.Tick
+				{index}
+				class={cn(
+					'dark:bg-background bg-background z-1 data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-px data-[orientation=vertical]:h-px data-[orientation=vertical]:w-4'
+				)}
+			/>
 			<SliderPrimitive.TickLabel
 				{index}
-				class="text-muted-foreground data-selected:text-foreground mr-5 text-sm font-medium leading-none whitespace-nowrap"
+				class={cn(
+					'text-muted-foreground data-selected:text-foreground data-[orientation=vertical]:mr-5 data-[orientation=horizontal]:mb-5 text-sm font-medium leading-none whitespace-nowrap'
+				)}
 			>
-				{value} day{value === 1 ? '' : 's'}
+				{#if isGoalTick}
+					<Goal class="size-6 text-primary" />
+				{:else}
+					{tickLabel}
+				{/if}
 			</SliderPrimitive.TickLabel>
 		{/each}
 	{/snippet}

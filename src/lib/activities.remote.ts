@@ -3,7 +3,8 @@ import { z } from 'zod';
 import { supabase } from './server/db';
 import { error, redirect } from '@sveltejs/kit';
 import type { ActivityWithWorkout } from '$lib/types';
-import { pushNotification } from '$lib/notifications.remote';
+import { notifyMilestoneReached, notifyWeeklyGoalReached } from '$lib/notifications.remote';
+import { endOfWeek, getLocalTimeZone, startOfWeek, today } from '@internationalized/date';
 
 const createActivitiesSchema = z.object({
 	date: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date format' }),
@@ -62,21 +63,54 @@ const mileStones = [
 	10, 25, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000
 ];
 
-export const completeActivity = command(z.number(), async (id) => {
-	const { error: dbError } = await supabase
+export const completeActivity = command(
+	z.object({
+		id: z.number(),
+		goal: z.number()
+	}),
+	async ({ id, goal }) => {
+		const { error: dbError } = await supabase
+			.from('workout_activity')
+			.update({ completed: true })
+			.eq('id', id);
+
+		if (dbError) {
+			error(400, dbError.message);
+		}
+
+		void getTodaysActivities().refresh();
+		void getThisWeeksCompletedActivitiesCount().refresh();
+
+		const activities = await getActivities();
+		const completedCount = activities.filter((activity) => activity.completed).length;
+		if (mileStones.includes(completedCount)) {
+			notifyMilestoneReached(completedCount);
+		}
+
+		const thisWeeksCount = await getThisWeeksCompletedActivitiesCount();
+		if (thisWeeksCount === goal) {
+			notifyWeeklyGoalReached();
+		}
+	}
+);
+
+export const getThisWeeksCompletedActivitiesCount = query(async () => {
+	const now = today(getLocalTimeZone());
+	const weekStart = startOfWeek(now, getLocalTimeZone(), 'mon');
+	const weekEnd = endOfWeek(now, getLocalTimeZone(), 'mon');
+
+	const { error: dbError, data } = await supabase
 		.from('workout_activity')
-		.update({ completed: true })
-		.eq('id', id);
+		.select('*')
+		.gte('date', weekStart.toString())
+		.lte('date', weekEnd.toString())
+		.eq('completed', true);
 
 	if (dbError) {
 		error(400, dbError.message);
 	}
 
-	void getTodaysActivities().refresh();
+	const uniqueDates = new Set(data?.map((activity) => activity.date));
 
-	const activities = await getActivities();
-	const completedCount = activities.filter((activity) => activity.completed).length;
-	if (mileStones.includes(completedCount)) {
-		pushNotification(completedCount);
-	}
+	return uniqueDates.size;
 });

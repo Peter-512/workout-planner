@@ -32,25 +32,40 @@ export const subscribeToNotifications = command(
 	}
 );
 
-export type Payload = {
-	title: string;
-	body: string;
-	icon: string;
-};
+const PayloadSchema = z.object({
+	title: z.string(),
+	body: z.string(),
+	icon: z.string()
+});
 
-export const pushNotification = command(z.number(), async (amount) => {
-	const { data, error: dbError } = await supabase.from('subscriptions').select('*');
+export type Payload = z.infer<typeof PayloadSchema>;
 
-	if (dbError) {
-		error(500, `Database error: ${dbError.message}`);
-	}
-
+export const notifyMilestoneReached = command(z.number(), async (amount) => {
 	const payload: Payload = {
 		title: 'Congrats on another milestone! 🚀',
 		body: `You have completed ${amount} workouts! Keep up the great work! 💪`,
 		icon: favicon
 	};
 
+	pushNotification(payload);
+});
+
+export const notifyWeeklyGoalReached = command(async () => {
+	const payload: Payload = {
+		title: 'Weekly Goal Achieved! 🎉',
+		body: `You've hit your weekly workout goal! Time to celebrate your dedication! 🥳`,
+		icon: favicon
+	};
+
+	pushNotification(payload);
+});
+
+const pushNotification = command(PayloadSchema, async (payload) => {
+	const { data, error: dbError } = await supabase.from('subscriptions').select('*');
+
+	if (dbError) {
+		error(500, `Database error: ${dbError.message}`);
+	}
 	for (const sub of data) {
 		await sendNotification(
 			{ ...sub, keys: { p256dh: sub.p256dh, auth: sub.auth } },
