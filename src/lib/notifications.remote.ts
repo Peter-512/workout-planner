@@ -1,12 +1,14 @@
 import { command } from '$app/server';
 import { supabase } from '$lib/server/db';
 import { error } from '@sveltejs/kit';
-import webPush, { type PushSubscription } from 'web-push';
+import webPush, { type PushSubscription, WebPushError } from 'web-push';
 import { z } from 'zod';
 import { VAPID_PRIVATE_KEY } from '$env/static/private';
 import { PUBLIC_VAPID_PUBLIC_KEY } from '$env/static/public';
 import { dev } from '$app/environment';
 import favicon from '$lib/assets/lightning.svg';
+import type { Subscription } from '$lib/types';
+import { err, ok } from 'neverthrow';
 
 const url = dev
 	? 'mailto:peter.buschenreiter@gmail.com'
@@ -67,9 +69,29 @@ const pushNotification = command(PayloadSchema, async (payload) => {
 		error(500, `Database error: ${dbError.message}`);
 	}
 	for (const sub of data) {
+		const result = await notify(sub, payload);
+		if (result.isErr()) {
+			await deleteSubscription(sub.id);
+		}
+	}
+});
+
+const notify = async (sub: Subscription, payload: Payload) => {
+	try {
 		await sendNotification(
 			{ ...sub, keys: { p256dh: sub.p256dh, auth: sub.auth } },
 			JSON.stringify(payload)
 		);
+		return ok();
+	} catch (e) {
+		return err<WebPushError>(e);
+	}
+};
+
+const deleteSubscription = command(z.number(), async (id) => {
+	const { error: dbError } = await supabase.from('subscriptions').delete().eq('id', id);
+
+	if (dbError) {
+		error(500, `Database error: ${dbError.message}`);
 	}
 });

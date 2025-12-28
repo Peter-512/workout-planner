@@ -7,3 +7,5 @@ export type WorkoutActivity = Database['public']['Tables']['workout_activity']['
 export type ActivityWithWorkout = WorkoutActivity & {
 	workout: Workout;
 };
+
+export type Subscription = Database['public']['Tables']['subscriptions']['Row'];
