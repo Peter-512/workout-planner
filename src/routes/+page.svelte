@@ -40,7 +40,7 @@
 	value={[weeklyGoal.current, thisWeeksCompletedActivities]}
 />
 
-<Carousel orientation="vertical">
+<Carousel class="mt-20" orientation="vertical">
 	<CarouselContent class="max-h-[500px]">
 		{#each activities as activity (activity.id)}
 			<CarouselItem class="mx-auto">
