@@ -8,7 +8,7 @@ import { PUBLIC_VAPID_PUBLIC_KEY } from '$env/static/public';
 import { dev } from '$app/environment';
 import favicon from '$lib/assets/lightning.svg';
 import type { Subscription } from '$lib/types';
-import { err, ok } from 'neverthrow';
+import { ResultAsync } from 'neverthrow';
 
 const url = dev
 	? 'mailto:peter.buschenreiter@gmail.com'
@@ -77,15 +77,13 @@ const pushNotification = command(PayloadSchema, async (payload) => {
 });
 
 const notify = async (sub: Subscription, payload: Payload) => {
-	try {
-		await sendNotification(
+	return ResultAsync.fromPromise(
+		sendNotification(
 			{ ...sub, keys: { p256dh: sub.p256dh, auth: sub.auth } },
 			JSON.stringify(payload)
-		);
-		return ok();
-	} catch (e) {
-		return err<WebPushError>(e);
-	}
+		),
+		(e) => e as WebPushError
+	);
 };
 
 const deleteSubscription = command(z.number(), async (id) => {
