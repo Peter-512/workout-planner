@@ -4,6 +4,11 @@
 	import { notificationsSupported, subscribeAfterPermission } from './notifications.svelte';
 	import { Spinner } from '$lib/components/ui/spinner';
 	import { ModeWatcher } from 'mode-watcher';
+	import { page } from '$app/state';
+	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
+	import { Slash } from '@lucide/svelte';
+	import { resolve } from '$app/paths';
+	import { cn } from '$lib/utils';
 
 	let { children } = $props();
 
@@ -35,6 +40,29 @@
 				<div class="animate-pulse font-medium">Loading…</div>
 			</div>
 		{/snippet}
+
+		{#if page.route.id !== '/'}
+			<Breadcrumb.Root
+				class={cn('self-start top-4 left-4 mt-4 ml-4', {
+					absolute: page.route.id === '/goal-setting' || page.route.id === '/add-workout'
+				})}
+			>
+				<Breadcrumb.List>
+					<Breadcrumb.Item>
+						<Breadcrumb.Link href={resolve('/')}>Home</Breadcrumb.Link>
+					</Breadcrumb.Item>
+					<Breadcrumb.Separator>
+						<Slash />
+					</Breadcrumb.Separator>
+					<Breadcrumb.Item>
+						<Breadcrumb.Page>
+							{page.route.id?.split('-').join(' ').slice(1)}
+						</Breadcrumb.Page>
+					</Breadcrumb.Item>
+				</Breadcrumb.List>
+			</Breadcrumb.Root>
+		{/if}
+
 		{@render children()}
 	</svelte:boundary>
 </main>
