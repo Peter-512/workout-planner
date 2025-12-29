@@ -3,6 +3,7 @@
 	import favicon from '$lib/assets/lightning.svg';
 	import { notificationsSupported, subscribeAfterPermission } from './notifications.svelte';
 	import { Spinner } from '$lib/components/ui/spinner';
+	import { ModeWatcher } from 'mode-watcher';
 
 	let { children } = $props();
 
@@ -25,6 +26,7 @@
 	<meta name="theme-color" content="#0ea5e9" />
 </svelte:head>
 
+<ModeWatcher />
 <main class="min-h-screen min-w-full flex flex-col items-center justify-center">
 	<svelte:boundary>
 		{#snippet pending()}
