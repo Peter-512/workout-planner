@@ -112,7 +112,7 @@
 			<CarouselItem class="mx-auto">
 				<div class="flex items-center h-[500px]">
 					<Card.Root>
-						<Card.Content class="w-full max-w-sm shadow-lg px-6">
+						<Card.Content class="w-full max-w-sm px-6">
 							<div class="text-center text-sm">It's a rest day today 😌</div>
 							<Origami size="100" class="m-auto mt-4" />
 						</Card.Content>

@@ -58,14 +58,14 @@
 				}}
 				class={cn(
 					'cursor-pointer rounded border p-3 text-sm mx-4',
-					isSelected ? 'border-blue-500' : 'border-gray-200'
+					isSelected ? 'border-primary' : 'border-gray-200'
 				)}
 				{...workout}
 			/>
 
 			{#if isSelected}
 				<div
-					class="absolute -top-2.75 right-1.25 flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white shadow"
+					class="absolute -top-2.75 right-1.25 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground shadow"
 				>
 					{idx + 1}
 				</div>
