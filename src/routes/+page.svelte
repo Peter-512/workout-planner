@@ -10,39 +10,28 @@
 	import { Origami, PartyPopper } from '@lucide/svelte';
 	import { confetti } from '@neoconfetti/svelte';
 
-	import {
-		completeActivity,
-		getThisWeeksCompletedActivitiesCount,
-		getTodaysActivities
-	} from '$lib/activities.remote';
+	import { completeActivity, getTodaysActivities } from '$lib/remote/activities.remote';
 	import { formatDuration, stars, thumbnailUrl } from '$lib/utils';
-	import Drawer from './Drawer.svelte';
+	import Drawer from '$lib/components/Drawer.svelte';
 	import { PersistedState } from 'runed';
-	import { Slider } from '$lib/components/ui/slider';
+	import WeeklyProgress from '$lib/components/WeeklyProgress.svelte';
+	import LoadingScreen from '$lib/components/LoadingScreen.svelte';
 
-	const activities = $derived(await getTodaysActivities());
 	let confettiContainer = $state<HTMLDivElement>();
 	const weeklyGoal = new PersistedState('weeklyGoal', 3);
-	const thisWeeksCompletedActivities = $derived(await getThisWeeksCompletedActivitiesCount());
 </script>
+
+<LoadingScreen />
 
 <div class="absolute top-10" bind:this={confettiContainer}></div>
 <Drawer />
 <Button href="workouts" class="fixed top-4 right-4" variant="secondary">Workouts</Button>
 
-<Slider
-	class="max-w-11/12 pointer-events-none"
-	type="multiple"
-	min={0}
-	max={7}
-	goal={weeklyGoal.current}
-	step={1}
-	value={[weeklyGoal.current, thisWeeksCompletedActivities]}
-/>
+<WeeklyProgress {weeklyGoal} />
 
 <Carousel class="mt-20" orientation="vertical">
 	<CarouselContent class="max-h-[500px]">
-		{#each activities as activity (activity.id)}
+		{#each await getTodaysActivities() as activity (activity.id)}
 			<CarouselItem class="mx-auto">
 				{#if activity?.workout && !activity.completed}
 					<div class="fade-out-0 flex items-center h-[500px]">
@@ -121,7 +110,8 @@
 			</CarouselItem>
 		{/each}
 	</CarouselContent>
-	{#if activities && activities.length > 1}
+	{@const todaysActivities = getTodaysActivities()}
+	{#if todaysActivities.current && todaysActivities.current.length > 1}
 		<CarouselButtons />
 	{/if}
 </Carousel>

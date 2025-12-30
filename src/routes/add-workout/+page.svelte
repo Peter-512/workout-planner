@@ -1,7 +1,10 @@
 <script lang="ts">
-	import { createWorkout } from '$lib/workouts.remote';
+	import { createWorkout } from '$lib/remote/workouts.remote';
 	import { Button } from '$lib/components/ui/button';
+	import LoadingScreen from '$lib/components/LoadingScreen.svelte';
 </script>
+
+<LoadingScreen />
 
 <form {...createWorkout} class="flex flex-col gap-4 p-4 w-full max-w-md mx-auto">
 	<label class="flex flex-col gap-1">

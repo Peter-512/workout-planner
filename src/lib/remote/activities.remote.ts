@@ -1,9 +1,9 @@
 import { command, form, query } from '$app/server';
 import { z } from 'zod';
-import { supabase } from './server/db';
+import { supabase } from '../server/db';
 import { error, redirect } from '@sveltejs/kit';
 import type { ActivityWithWorkout } from '$lib/types';
-import { notifyMilestoneReached, notifyWeeklyGoalReached } from '$lib/notifications.remote';
+import { notifyMilestoneReached, notifyWeeklyGoalReached } from '$lib/remote/notifications.remote';
 import { endOfWeek, getLocalTimeZone, startOfWeek, today } from '@internationalized/date';
 
 const createActivitiesSchema = z.object({

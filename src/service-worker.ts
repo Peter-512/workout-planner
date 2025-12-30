@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-import type { Payload } from './lib/notifications.remote';
+import type { Payload } from './lib/remote/notifications.remote';
 
 declare const self: ServiceWorkerGlobalScope;
 

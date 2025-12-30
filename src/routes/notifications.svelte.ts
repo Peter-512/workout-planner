@@ -1,6 +1,6 @@
 import { PUBLIC_VAPID_PUBLIC_KEY } from '$env/static/public';
 import type { PushSubscription as WebPushSubscription } from 'web-push';
-import { subscribeToNotifications } from '$lib/notifications.remote';
+import { subscribeToNotifications } from '$lib/remote/notifications.remote';
 
 export const notificationsSupported =
 	typeof window !== 'undefined' &&

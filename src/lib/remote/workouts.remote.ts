@@ -2,7 +2,7 @@ import { form, query } from '$app/server';
 import { z } from 'zod';
 import { YOUTUBE_API_KEY } from '$env/static/private';
 import { error, redirect } from '@sveltejs/kit';
-import { supabase } from './server/db';
+import { supabase } from '../server/db';
 import type { Workout } from '$lib/types';
 
 // Helper: extract YouTube video ID from various URL formats

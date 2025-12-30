@@ -3,9 +3,12 @@
 	import { Slider } from '$lib/components/ui/slider';
 	import { Button } from '$lib/components/ui/button';
 	import { resolve } from '$app/paths';
+	import LoadingScreen from '$lib/components/LoadingScreen.svelte';
 
 	const weeklyGoal = new PersistedState('weeklyGoal', 3);
 </script>
+
+<LoadingScreen />
 
 <div class="flex items-center justify-between flex-col gap-4">
 	<div class="text-center">

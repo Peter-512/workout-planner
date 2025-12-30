@@ -7,11 +7,14 @@
 		Header,
 		Title,
 		Description
-	} from '$lib/components/ui/drawer/index.js';
+	} from '$lib/components/ui/drawer';
 	import { Button } from '$lib/components/ui/button';
 	import { MenuIcon, Goal, CalendarSync, Bell } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
-	import { notificationsSupported, subscribeAfterPermission } from './notifications.svelte';
+	import {
+		notificationsSupported,
+		subscribeAfterPermission
+	} from '../../routes/notifications.svelte.js';
 	import { page } from '$app/state';
 </script>
 

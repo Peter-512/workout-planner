@@ -5,9 +5,10 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
-	import { getWorkouts } from '$lib/workouts.remote';
-	import Workout from '$lib/Workout.svelte';
-	import { createActivities } from '$lib/activities.remote';
+	import { getWorkouts } from '$lib/remote/workouts.remote';
+	import Workout from '$lib/components/Workout.svelte';
+	import { createActivities } from '$lib/remote/activities.remote';
+	import LoadingScreen from '$lib/components/LoadingScreen.svelte';
 
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'long'
@@ -16,10 +17,10 @@
 	let date = $state<DateValue>();
 	let open = $state(true);
 
-	const workouts = await getWorkouts();
-
 	let selectedIds = $state<Array<number>>([]);
 </script>
+
+<LoadingScreen />
 
 <Popover.Root bind:open>
 	<Popover.Trigger class="mt-2">
@@ -44,10 +45,13 @@
 </Popover.Root>
 
 <div class="mt-4 max-w-md mx-auto flex flex-col gap-2">
-	{#each workouts as { id, url: _url, ...workout }, i (id)}
+	{#each await getWorkouts() as { id, url: _url, ...workout }, i (id)}
 		{@const idx = selectedIds.indexOf(id)}
 		{@const isSelected = idx !== -1}
-		<div class={cn('relative', i === workouts.length - 1 ? 'mb-24' : '')}>
+		{@const workouts = getWorkouts()}
+		<div
+			class={cn('relative', workouts.current && i === workouts.current.length - 1 ? 'mb-24' : '')}
+		>
 			<Workout
 				onclick={() => {
 					if (idx === -1) {
