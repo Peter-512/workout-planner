@@ -100,13 +100,15 @@
 			</CarouselItem>
 		{:else}
 			<CarouselItem class="mx-auto">
-				<Empty.Root>
-					<Empty.Media>
-						<Origami size="100" />
-					</Empty.Media>
-					<Empty.Title>It's a rest day today</Empty.Title>
-					<Empty.Description>Enjoy your well-deserved break! 😌</Empty.Description>
-				</Empty.Root>
+				<div class="flex items-center h-[500px]">
+					<Empty.Root>
+						<Empty.Media>
+							<Origami size="100" />
+						</Empty.Media>
+						<Empty.Title>It's a rest day today</Empty.Title>
+						<Empty.Description>Enjoy your well-deserved break! 😌</Empty.Description>
+					</Empty.Root>
+				</div>
 			</CarouselItem>
 		{/each}
 	</CarouselContent>
