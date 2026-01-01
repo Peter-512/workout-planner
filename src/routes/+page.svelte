@@ -7,6 +7,7 @@
 		CarouselButtons
 	} from '$lib/components/ui/carousel';
 	import { Button } from '$lib/components/ui/button';
+	import * as Empty from '$lib/components/ui/empty';
 	import { Origami, PartyPopper } from '@lucide/svelte';
 	import { confetti } from '@neoconfetti/svelte';
 
@@ -99,14 +100,13 @@
 			</CarouselItem>
 		{:else}
 			<CarouselItem class="mx-auto">
-				<div class="flex items-center h-[500px]">
-					<Card.Root>
-						<Card.Content class="w-full max-w-sm px-6">
-							<div class="text-center text-sm">It's a rest day today 😌</div>
-							<Origami size="100" class="m-auto mt-4" />
-						</Card.Content>
-					</Card.Root>
-				</div>
+				<Empty.Root>
+					<Empty.Icon>
+						<Origami size="100" />
+					</Empty.Icon>
+					<Empty.Title>It's a rest day today</Empty.Title>
+					<Empty.Description>Enjoy your well-deserved break! 😌</Empty.Description>
+				</Empty.Root>
 			</CarouselItem>
 		{/each}
 	</CarouselContent>
