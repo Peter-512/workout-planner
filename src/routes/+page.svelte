@@ -101,9 +101,9 @@
 		{:else}
 			<CarouselItem class="mx-auto">
 				<Empty.Root>
-					<Empty.Icon>
+					<Empty.Media>
 						<Origami size="100" />
-					</Empty.Icon>
+					</Empty.Media>
 					<Empty.Title>It's a rest day today</Empty.Title>
 					<Empty.Description>Enjoy your well-deserved break! 😌</Empty.Description>
 				</Empty.Root>

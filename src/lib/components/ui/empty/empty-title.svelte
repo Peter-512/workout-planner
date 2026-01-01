@@ -1,20 +1,20 @@
 <script lang="ts">
-	import type { HTMLAttributes } from 'svelte/elements';
 	import { cn, type WithElementRef } from '$lib/utils.js';
+	import type { HTMLAttributes } from 'svelte/elements';
 
 	let {
 		ref = $bindable(null),
 		class: className,
 		children,
 		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLHeadingElement>> = $props();
+	}: WithElementRef<HTMLAttributes<HTMLDivElement>> = $props();
 </script>
 
-<h3
+<div
 	bind:this={ref}
 	data-slot="empty-title"
-	class={cn('text-lg font-semibold tracking-tight', className)}
+	class={cn('text-lg font-medium tracking-tight', className)}
 	{...restProps}
 >
 	{@render children?.()}
-</h3>
+</div>

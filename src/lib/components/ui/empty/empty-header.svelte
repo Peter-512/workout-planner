@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { HTMLAttributes } from 'svelte/elements';
 	import { cn, type WithElementRef } from '$lib/utils.js';
+	import type { HTMLAttributes } from 'svelte/elements';
 
 	let {
 		ref = $bindable(null),
@@ -12,8 +12,8 @@
 
 <div
 	bind:this={ref}
-	data-slot="empty-icon"
-	class={cn('text-muted-foreground', className)}
+	data-slot="empty-header"
+	class={cn('flex max-w-sm flex-col items-center gap-2 text-center', className)}
 	{...restProps}
 >
 	{@render children?.()}

@@ -12,9 +12,9 @@
 
 <div
 	bind:this={ref}
-	data-slot="empty-description"
+	data-slot="empty-content"
 	class={cn(
-		'text-muted-foreground [&>a:hover]:text-primary text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4',
+		'flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance',
 		className
 	)}
 	{...restProps}
