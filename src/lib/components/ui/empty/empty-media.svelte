@@ -32,7 +32,7 @@
 
 <div
 	bind:this={ref}
-	data-slot="empty-icon"
+	data-slot="empty-media"
 	data-variant={variant}
 	class={cn(emptyMediaVariants({ variant }), className)}
 	{...restProps}
