@@ -1,28 +1,33 @@
 <script lang="ts">
 	import { getActivities } from '$lib/remote/activities.remote';
 	import LoadingScreen from '$lib/components/LoadingScreen.svelte';
-	import { Card } from '$lib/components/ui/card';
 	import type { ActivityWithWorkout } from '$lib/types';
 	import Workout from '$lib/components/Workout.svelte';
+	import { Separator } from '$lib/components/ui/separator';
 
-	function groupByDay(items: ActivityWithWorkout[]) {
-		const groups: Record<string, ActivityWithWorkout[]> = {};
-		for (const item of items) {
-			const key = item.date; // ISO yyyy-mm-dd
-			(groups[key] ??= []).push(item);
-		}
-		// Sort days descending (latest first)
-		const entries = Object.entries(groups).sort(([a], [b]) => (a < b ? 1 : a > b ? -1 : 0));
-		return entries;
+	function groupByDate(items: ActivityWithWorkout[]) {
+		return Object.entries(Object.groupBy(items, (activity) => activity.date));
 	}
 
 	function formatDayLabel(isoDate: string) {
-		const d = new Date(isoDate + 'T00:00:00');
-		return d.toLocaleDateString(undefined, {
+		const d = new Date(isoDate);
+		return d.toLocaleDateString('en', {
 			weekday: 'long',
 			month: 'short',
 			day: 'numeric'
 		});
+	}
+
+	function formatShort(isoDate: string) {
+		const d = new Date(isoDate);
+		return d.toLocaleDateString('en', { month: 'short', day: 'numeric' });
+	}
+
+	function daysBetween(a: string, b: string) {
+		const ad = new Date(a);
+		const bd = new Date(b);
+		const ms = Math.abs(ad.getTime() - bd.getTime());
+		return Math.floor(ms / (1000 * 60 * 60 * 24));
 	}
 </script>
 
@@ -30,21 +35,32 @@
 
 <div class="min-h-screen w-full px-4 py-6">
 	<div class="max-w-md mx-auto flex flex-col gap-4">
-		{#await getActivities() then activities}
-			{#if activities?.length}
-				{#each groupByDay(activities) as [day, items] (day)}
-					<h2 class="text-sm font-semibold tracking-wide text-muted-foreground">
-						{formatDayLabel(day)}
-					</h2>
-					<div class="flex flex-col gap-3">
-						{#each items as { id: activityId, workout: { id, ...rest } } (`activity-${activityId}-workout-${id}`)}
-							<Workout {...rest} />
-						{/each}
+		{#each groupByDate(await getActivities()) as [day, items], i (`day-group-${day}`)}
+			{#if i > 0}
+				<!-- Insert rest day divider for gap between previous day and this day -->
+				{@const [prevDay] = groupByDate(getActivities().current ?? [])[i - 1]}
+				{@const gap = daysBetween(prevDay, day) - 1}
+				{#if gap > 0}
+					<div class="flex items-center gap-2 text-xs text-muted-foreground py-1">
+						<div class="flex-1"><Separator /></div>
+						{#if gap === 1}
+							<span>Rest day · {formatShort(prevDay)}</span>
+						{:else}
+							<span>Rest days · {formatShort(day)} – {formatShort(prevDay)}</span>
+						{/if}
+						<div class="flex-1"><Separator /></div>
 					</div>
-				{/each}
-			{:else}
-				<Card class="p-6 text-center text-sm">No activities yet</Card>
+				{/if}
 			{/if}
-		{/await}
+
+			<h2 class="text-sm font-semibold tracking-wide text-muted-foreground">
+				{formatDayLabel(day)}
+			</h2>
+			<div class="flex flex-col gap-3">
+				{#each items as { id: activityId, workout: { id, ...rest } } (`activity-${activityId}-workout-${id}`)}
+					<Workout {...rest} />
+				{/each}
+			</div>
+		{/each}
 	</div>
 </div>
