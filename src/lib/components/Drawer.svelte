@@ -9,7 +9,7 @@
 		Description
 	} from '$lib/components/ui/drawer';
 	import { Button } from '$lib/components/ui/button';
-	import { MenuIcon, Goal, CalendarSync, Bell } from '@lucide/svelte';
+	import { MenuIcon, Goal, CalendarSync, Bell, History } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 	import {
 		notificationsSupported,
@@ -31,6 +31,19 @@
 		</Header>
 
 		<div class="container my-4 flex flex-col justify-center gap-2">
+			<Close>
+				{#snippet child({ props })}
+					<Button
+						{...props}
+						class="text-lg text-accent-foreground"
+						variant="link"
+						href={resolve('/history')}
+					>
+						<History class="text-primary size-6" />
+						History
+					</Button>
+				{/snippet}
+			</Close>
 			{#if notificationsSupported && Notification.permission !== 'granted'}
 				<Close>
 					{#snippet child({ props })}
