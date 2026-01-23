@@ -4,7 +4,7 @@ import { supabase } from '../server/db';
 import { error, redirect } from '@sveltejs/kit';
 import type { ActivityWithWorkout } from '$lib/types';
 import { notifyMilestoneReached, notifyWeeklyGoalReached } from '$lib/remote/notifications.remote';
-import { endOfWeek, getLocalTimeZone, startOfWeek, today } from '@internationalized/date';
+import { endOfWeek, fromDate, getLocalTimeZone, startOfWeek, today } from '@internationalized/date';
 
 const createActivitiesSchema = z.object({
 	date: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date format' }),
@@ -14,11 +14,13 @@ const createActivitiesSchema = z.object({
 });
 
 export const createActivities = form(createActivitiesSchema, async ({ date, ids }) => {
-	const workoutIds = ids.map((id) => Number(id));
-
-	const rows = workoutIds.map((workout_id) => ({
-		workout_id,
-		date
+	const currentDate = today(getLocalTimeZone());
+	const calDate = fromDate(new Date(date), getLocalTimeZone());
+	const isDateInThePast = currentDate.compare(calDate) > 0;
+	const rows = ids.map((workout_id) => ({
+		workout_id: Number(workout_id),
+		date,
+		completed: isDateInThePast
 	}));
 
 	const { error: dbError } = await supabase.from('workout_activity').insert(rows);
@@ -31,12 +33,11 @@ export const createActivities = form(createActivitiesSchema, async ({ date, ids 
 });
 
 export const getTodaysActivities = query<ActivityWithWorkout[] | null>(async () => {
-	const today = new Date().toISOString().split('T')[0];
-
+	const date = today(getLocalTimeZone()).toString();
 	const { data, error: dbError } = await supabase
 		.from('workout_activity')
 		.select('*, workout(*)')
-		.eq('date', today)
+		.eq('date', date)
 		.order('id');
 
 	if (dbError) {

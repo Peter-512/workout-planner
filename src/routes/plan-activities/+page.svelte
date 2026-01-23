@@ -35,7 +35,6 @@
 		<Calendar
 			weekStartsOn={1}
 			onValueChange={() => (open = false)}
-			minValue={today(getLocalTimeZone())}
 			bind:value={date}
 			type="single"
 			initialFocus
