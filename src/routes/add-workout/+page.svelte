@@ -28,6 +28,26 @@
 			required
 		>
 			<option value="" disabled selected>Select intensity</option>
+			<option value="1">1 💧</option>
+			<option value="2">2 💧💧</option>
+			<option value="3">3 💧💧💧</option>
+			<option value="4">4 💧💧💧💧</option>
+			<option value="5">5 💧💧💧💧💧</option>
+		</select>
+	</label>
+
+	{#each createWorkout.fields.intensity.issues() as issue (issue.message)}
+		<p class="issue">{issue.message}</p>
+	{/each}
+
+	<label class="flex flex-col gap-1">
+		<span class="text-sm font-medium">Enjoyment rating</span>
+		<select
+			class="rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+			{...createWorkout.fields.rating.as('select')}
+			required
+		>
+			<option value="" disabled selected>Select rating</option>
 			<option value="1">1 ⭐</option>
 			<option value="2">2 ⭐⭐</option>
 			<option value="3">3 ⭐⭐⭐</option>
@@ -36,7 +56,7 @@
 		</select>
 	</label>
 
-	{#each createWorkout.fields.intensity.issues() as issue (issue.message)}
+	{#each createWorkout.fields.rating.issues() as issue (issue.message)}
 		<p class="issue">{issue.message}</p>
 	{/each}
 

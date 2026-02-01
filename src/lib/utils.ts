@@ -13,7 +13,11 @@ export type WithoutChildrenOrChild<T> = WithoutChildren<WithoutChild<T>>;
 export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & { ref?: U | null };
 
 export function stars(n: number): string {
-	return '★'.repeat(n);
+	return '⭐'.repeat(n);
+}
+
+export function drops(n: number): string {
+	return '💧'.repeat(n);
 }
 
 export function thumbnailUrl(id: string): string {

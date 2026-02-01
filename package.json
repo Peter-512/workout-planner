@@ -15,6 +15,7 @@
 		"lint": "prettier --check . && eslint .",
 		"db:migration:new": "supabase migration new",
 		"db:migration:auto": "supabase db diff --use-migra -f",
+		"db:migration:up": "supabase migration up",
 		"db:types": "supabase gen types typescript --local --schema public > src/lib/types/supabase.ts",
 		"db:reset": "supabase db reset",
 		"db:stop": "supabase stop"

@@ -71,9 +71,10 @@ export const createWorkout = form(
 	z.object({
 		url: z.url(),
 		intensity: z.enum(['1', '2', '3', '4', '5']),
+		rating: z.enum(['1', '2', '3', '4', '5']),
 		type: z.enum(['cardio', 'strength', 'stretching', 'dance party', 'yoga', 'mobility'])
 	}),
-	async ({ url, intensity, type }) => {
+	async ({ url, intensity, rating, type }) => {
 		const videoId = extractYouTubeId(url);
 		if (!videoId) {
 			error(400, 'Invalid YouTube URL');
@@ -82,6 +83,7 @@ export const createWorkout = form(
 		const enriched = {
 			url,
 			intensity: parseInt(intensity, 10),
+			rating: parseInt(rating, 10),
 			videoId,
 			title: info.title,
 			duration: info.durationSeconds,

@@ -254,6 +254,7 @@ export type Database = {
 					duration: number;
 					id: number;
 					intensity: number;
+					rating: number;
 					title: string;
 					type: string | null;
 					url: string;
@@ -264,6 +265,7 @@ export type Database = {
 					duration: number;
 					id?: number;
 					intensity: number;
+					rating: number;
 					title: string;
 					type?: string | null;
 					url: string;
@@ -274,6 +276,7 @@ export type Database = {
 					duration?: number;
 					id?: number;
 					intensity?: number;
+					rating?: number | null;
 					title?: string;
 					type?: string | null;
 					url?: string;
