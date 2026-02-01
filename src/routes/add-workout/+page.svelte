@@ -51,6 +51,9 @@
 			<option value="cardio">Cardio</option>
 			<option value="strength">Strength</option>
 			<option value="stretching">Stretching</option>
+			<option value="dance party">Dance party</option>
+			<option value="yoga">Yoga</option>
+			<option value="mobility">Mobility</option>
 		</select>
 	</label>
 

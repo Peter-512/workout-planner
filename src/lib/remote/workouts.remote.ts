@@ -71,7 +71,7 @@ export const createWorkout = form(
 	z.object({
 		url: z.url(),
 		intensity: z.enum(['1', '2', '3', '4', '5']),
-		type: z.enum(['cardio', 'strength', 'stretching'])
+		type: z.enum(['cardio', 'strength', 'stretching', 'dance party', 'yoga', 'mobility'])
 	}),
 	async ({ url, intensity, type }) => {
 		const videoId = extractYouTubeId(url);
