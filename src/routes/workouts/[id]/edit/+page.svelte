@@ -3,10 +3,13 @@
 	import { Button } from '$lib/components/ui/button';
 	import { getWorkoutById, updateWorkout } from '$lib/remote/workouts.remote';
 	import { drops, formatDuration, stars } from '$lib/utils';
+	import LoadingScreen from '$lib/components/LoadingScreen.svelte';
 
 	const id = $derived(Number(page.params.id));
 	const workout = $derived(await getWorkoutById({ id }));
 </script>
+
+<LoadingScreen />
 
 <div class="flex flex-col gap-4 p-4 w-full max-w-md mx-auto">
 	<form {...updateWorkout} class="flex flex-col gap-4">
