@@ -1,4 +1,4 @@
-import { form, query } from '$app/server';
+import { command, form, query } from '$app/server';
 import { z } from 'zod';
 import { YOUTUBE_API_KEY } from '$env/static/private';
 import { error, redirect } from '@sveltejs/kit';
@@ -109,9 +109,14 @@ export const updateWorkout = form(
 			.refine((value) => Number.isFinite(value) && value > 0, { message: 'Invalid id' }),
 		intensity: z.enum(['1', '2', '3', '4', '5']),
 		rating: z.enum(['1', '2', '3', '4', '5']),
-		type: z.enum(['cardio', 'strength', 'stretching', 'dance party', 'yoga', 'mobility'])
+		type: z.enum(['cardio', 'strength', 'stretching', 'dance party', 'yoga', 'mobility']),
+		action: z.enum(['update', 'delete'])
 	}),
-	async ({ id, intensity, rating, type }) => {
+	async ({ id, intensity, rating, type, action }) => {
+		if (action === 'delete') {
+			return deleteWorkout({ id: id.toString() });
+		}
+
 		const { error: dbError } = await supabase
 			.from('workout')
 			.update({
@@ -158,6 +163,25 @@ export const getWorkoutById = query(
 		}
 
 		return data;
+	}
+);
+
+export const deleteWorkout = command(
+	z.object({
+		id: z
+			.string()
+			.min(1)
+			.transform((value) => Number(value))
+			.refine((value) => Number.isFinite(value) && value > 0, { message: 'Invalid id' })
+	}),
+	async ({ id }) => {
+		const { error: dbError } = await supabase.from('workout').delete().eq('id', id);
+
+		if (dbError) {
+			error(500, `Database error: ${dbError.message}`);
+		}
+
+		redirect(303, '/workouts');
 	}
 );
 
