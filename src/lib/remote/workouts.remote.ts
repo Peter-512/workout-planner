@@ -184,5 +184,3 @@ export const deleteWorkout = command(
 		redirect(303, '/workouts');
 	}
 );
-
-// TODO: add delete button to edit workout page
