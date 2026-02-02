@@ -1,6 +1,6 @@
 <script lang="ts">
 	import CalendarIcon from '@lucide/svelte/icons/calendar';
-	import { type DateValue, DateFormatter, getLocalTimeZone, today } from '@internationalized/date';
+	import { type DateValue, DateFormatter, getLocalTimeZone } from '@internationalized/date';
 	import { cn } from '$lib/utils.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
@@ -44,7 +44,7 @@
 </Popover.Root>
 
 <div class="mt-4 max-w-md mx-auto flex flex-col gap-2">
-	{#each await getWorkouts() as { id, url: _url, ...workout }, i (id)}
+	{#each await getWorkouts() as { id, ...workout }, i (id)}
 		{@const idx = selectedIds.indexOf(id)}
 		{@const isSelected = idx !== -1}
 		{@const workouts = getWorkouts()}
@@ -52,6 +52,7 @@
 			class={cn('relative', workouts.current && i === workouts.current.length - 1 ? 'mb-24' : '')}
 		>
 			<Workout
+				workoutId={id}
 				onclick={() => {
 					if (idx === -1) {
 						selectedIds.push(id);
@@ -59,6 +60,7 @@
 						selectedIds.splice(idx, 1);
 					}
 				}}
+				links={false}
 				class={cn(
 					'cursor-pointer rounded border p-3 text-sm mx-4',
 					isSelected ? 'border-primary' : 'border-gray-200'

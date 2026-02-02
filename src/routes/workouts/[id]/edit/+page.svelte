@@ -1,89 +1,100 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { page } from '$app/state';
 	import { Button } from '$lib/components/ui/button';
 	import LoadingScreen from '$lib/components/LoadingScreen.svelte';
-	import type { PageData } from './$types';
+	import { getWorkoutById, updateWorkout } from '$lib/remote/workouts.remote';
+	import { drops, formatDuration, stars } from '$lib/utils';
 
-	let { data }: { data: PageData } = $props();
-	const workout = $derived(data.workout);
-
-	let url = $state('');
-	let intensity = $state('1');
-	let rating = $state('1');
-	let type = $state('cardio');
-
-	onMount(() => {
-		url = workout.url;
-		intensity = String(workout.intensity);
-		rating = String(workout.rating ?? 3);
-		type = workout.type ?? 'cardio';
-	});
+	const id = $derived(Number(page.params.id));
 </script>
 
 <LoadingScreen />
 
-<form method="POST" class="flex flex-col gap-4 p-4 w-full max-w-md mx-auto">
-	<input type="hidden" name="id" value={workout.id} />
+{#await getWorkoutById({ id })}
+	<div class="p-4 text-sm text-gray-500">Loading workout…</div>
+{:then workout}
+	<form {...updateWorkout} class="flex flex-col gap-4 p-4 w-full max-w-md mx-auto">
+		<div class="flex items-start gap-3 flex-col">
+			<div class="flex-1">
+				<h2 class="text-base font-semibold">{workout.title}</h2>
+				<p class="mt-1 text-xs text-muted-foreground">{formatDuration(workout.duration)}</p>
+			</div>
+			<img
+				src={`https://img.youtube.com/vi/${workout.videoId}/hqdefault.jpg`}
+				alt="YouTube thumbnail"
+				class="rounded object-cover w-full"
+				loading="lazy"
+			/>
+		</div>
+		<input {...updateWorkout.fields.id.as('hidden', `${workout.id}`)} />
 
-	<label class="flex flex-col gap-1">
-		<span class="text-sm font-medium">Workout URL</span>
-		<input
-			class="rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-			name="url"
-			required
-			bind:value={url}
-			placeholder="https://example.com/workout"
-		/>
-	</label>
+		<label class="flex flex-col gap-1">
+			<span class="text-sm font-medium">Intensity</span>
+			<select
+				class="rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+				{...updateWorkout.fields.intensity.as('select')}
+				required
+			>
+				{#each [1, 2, 3, 4, 5] as level (level)}
+					{@const selectedIntensity = workout.intensity ?? 1}
+					<option selected={selectedIntensity === 1} value={String(level)}
+						>{level} {drops(level)}</option
+					>
+				{/each}
+			</select>
+		</label>
+		{#each updateWorkout.fields.intensity.issues() as issue (issue.message)}
+			<p class="issue">{issue.message}</p>
+		{/each}
 
-	<label class="flex flex-col gap-1">
-		<span class="text-sm font-medium">Intensity</span>
-		<select
-			class="rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-			name="intensity"
-			required
-			bind:value={intensity}
-		>
-			<option value="1">1 💧</option>
-			<option value="2">2 💧💧</option>
-			<option value="3">3 💧💧💧</option>
-			<option value="4">4 💧💧💧💧</option>
-			<option value="5">5 💧💧💧💧💧</option>
-		</select>
-	</label>
+		<label class="flex flex-col gap-1">
+			<span class="text-sm font-medium">Enjoyment rating</span>
+			<select
+				class="rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+				{...updateWorkout.fields.rating.as('select')}
+				required
+			>
+				{#each [1, 2, 3, 4, 5] as rating (rating)}
+					{@const selectedRating = workout.rating ?? 3}
+					<option selected={selectedRating === rating} value={String(rating)}
+						>{rating} {stars(rating)}</option
+					>
+				{/each}
+			</select>
+		</label>
+		{#each updateWorkout.fields.rating.issues() as issue (issue.message)}
+			<p class="issue">{issue.message}</p>
+		{/each}
 
-	<label class="flex flex-col gap-1">
-		<span class="text-sm font-medium">Enjoyment rating</span>
-		<select
-			class="rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-			name="rating"
-			required
-			bind:value={rating}
-		>
-			<option value="1">1 ⭐</option>
-			<option value="2">2 ⭐⭐</option>
-			<option value="3">3 ⭐⭐⭐</option>
-			<option value="4">4 ⭐⭐⭐⭐</option>
-			<option value="5">5 ⭐⭐⭐⭐⭐</option>
-		</select>
-	</label>
+		<label class="flex flex-col gap-1">
+			<span class="text-sm font-medium">Workout type</span>
+			<select
+				class="rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+				{...updateWorkout.fields.type.as('select')}
+				required
+			>
+				{#each ['cardio', 'strength', 'stretching', 'dance party', 'yoga', 'mobility'] as type (type)}
+					{@const selectedType = workout.type ?? 'cardio'}
+					<option selected={selectedType === type} value={type}
+						>{type.charAt(0).toUpperCase() + type.slice(1)}</option
+					>
+				{/each}
+			</select>
+		</label>
+		{#each updateWorkout.fields.type.issues() as issue (issue.message)}
+			<p class="issue">{issue.message}</p>
+		{/each}
 
-	<label class="flex flex-col gap-1">
-		<span class="text-sm font-medium">Workout type</span>
-		<select
-			class="rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-			name="type"
-			required
-			bind:value={type}
-		>
-			<option value="cardio">Cardio</option>
-			<option value="strength">Strength</option>
-			<option value="stretching">Stretching</option>
-			<option value="dance party">Dance party</option>
-			<option value="yoga">Yoga</option>
-			<option value="mobility">Mobility</option>
-		</select>
-	</label>
+		<Button type="submit" class="w-full">Save changes</Button>
+	</form>
+{:catch err}
+	<div class="p-4 text-sm text-red-600">Failed to load workout: {err?.message}</div>
+{/await}
 
-	<Button type="submit" class="w-full">Save changes</Button>
-</form>
+<style>
+	.issue {
+		color: #dc2626;
+		font-size: 0.875rem;
+		margin-top: 0.25rem;
+	}
+</style>

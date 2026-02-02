@@ -100,6 +100,35 @@ export const createWorkout = form(
 	}
 );
 
+export const updateWorkout = form(
+	z.object({
+		id: z
+			.string()
+			.min(1)
+			.transform((value) => Number(value))
+			.refine((value) => Number.isFinite(value) && value > 0, { message: 'Invalid id' }),
+		intensity: z.enum(['1', '2', '3', '4', '5']),
+		rating: z.enum(['1', '2', '3', '4', '5']),
+		type: z.enum(['cardio', 'strength', 'stretching', 'dance party', 'yoga', 'mobility'])
+	}),
+	async ({ id, intensity, rating, type }) => {
+		const { error: dbError } = await supabase
+			.from('workout')
+			.update({
+				intensity: parseInt(intensity, 10),
+				rating: parseInt(rating, 10),
+				type
+			})
+			.eq('id', id);
+
+		if (dbError) {
+			error(500, `Database error: ${dbError.message}`);
+		}
+
+		redirect(303, '/workouts');
+	}
+);
+
 export const getWorkouts = query(async (): Promise<Workout[]> => {
 	const { data, error: dbError } = await supabase
 		.from('workout')
@@ -110,5 +139,26 @@ export const getWorkouts = query(async (): Promise<Workout[]> => {
 		error(500, `Database error: ${dbError.message}`);
 	}
 
-	return data;
+	return data ?? [];
 });
+
+export const getWorkoutById = query(
+	z.object({
+		id: z.coerce.number().int().positive()
+	}),
+	async ({ id }): Promise<Workout> => {
+		const { data, error: dbError } = await supabase
+			.from('workout')
+			.select('*')
+			.eq('id', id)
+			.single();
+
+		if (dbError) {
+			error(404, 'Workout not found');
+		}
+
+		return data;
+	}
+);
+
+// TODO: add delete button to edit workout page

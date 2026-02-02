@@ -11,6 +11,14 @@
 	import { cn } from '$lib/utils';
 
 	let { children } = $props();
+	const pathSegments = $derived(
+		page.url.pathname
+			.split('/')
+			.filter(Boolean)
+			.map((segment) => decodeURIComponent(segment))
+	);
+
+	const segmentLabel = (segment: string) => segment.split('-').join(' ');
 
 	$effect(() => {
 		if (notificationsSupported && Notification.permission === 'default') {
@@ -44,21 +52,32 @@
 		{#if page.route.id !== '/'}
 			<Breadcrumb.Root
 				class={cn('self-start top-4 left-4 mt-4 ml-4', {
-					absolute: page.route.id === '/goal-setting' || page.route.id === '/add-workout'
+					absolute:
+						page.route.id === '/goal-setting' ||
+						page.route.id === '/add-workout' ||
+						page.route.id?.endsWith('edit')
 				})}
 			>
 				<Breadcrumb.List>
 					<Breadcrumb.Item>
 						<Breadcrumb.Link href={resolve('/')}>Home</Breadcrumb.Link>
 					</Breadcrumb.Item>
-					<Breadcrumb.Separator>
-						<Slash />
-					</Breadcrumb.Separator>
-					<Breadcrumb.Item>
-						<Breadcrumb.Page>
-							{page.route.id?.split('-').join(' ').slice(1)}
-						</Breadcrumb.Page>
-					</Breadcrumb.Item>
+					{#each pathSegments as segment, index (segment)}
+						<Breadcrumb.Separator>
+							<Slash />
+						</Breadcrumb.Separator>
+						{#if index < pathSegments.length - 1}
+							<Breadcrumb.Item>
+								<Breadcrumb.Link href={`/${pathSegments.slice(0, index + 1).join('/')}`}>
+									{segmentLabel(segment)}
+								</Breadcrumb.Link>
+							</Breadcrumb.Item>
+						{:else}
+							<Breadcrumb.Item>
+								<Breadcrumb.Page>{segmentLabel(segment)}</Breadcrumb.Page>
+							</Breadcrumb.Item>
+						{/if}
+					{/each}
 				</Breadcrumb.List>
 			</Breadcrumb.Root>
 		{/if}
