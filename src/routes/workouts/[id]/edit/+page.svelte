@@ -5,7 +5,7 @@
 	import { drops, formatDuration, stars } from '$lib/utils';
 
 	const id = $derived(Number(page.params.id));
-	const workout = await getWorkoutById({ id });
+	const workout = $derived(await getWorkoutById({ id }));
 </script>
 
 <div class="flex flex-col gap-4 p-4 w-full max-w-md mx-auto">

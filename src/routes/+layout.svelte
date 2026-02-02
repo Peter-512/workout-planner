@@ -51,7 +51,7 @@
 
 		{#if page.route.id !== '/'}
 			<Breadcrumb.Root
-				class={cn('self-start top-4 left-4 mt-4 ml-4', {
+				class={cn('self-start top-0 left-0 mt-4 ml-4', {
 					absolute:
 						page.route.id === '/goal-setting' ||
 						page.route.id === '/add-workout' ||
