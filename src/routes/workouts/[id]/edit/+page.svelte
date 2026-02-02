@@ -37,8 +37,8 @@
 					required
 				>
 					{#each [1, 2, 3, 4, 5] as level (level)}
-						{@const selectedIntensity = workout.intensity ?? 1}
-						<option selected={selectedIntensity === 1} value={String(level)}
+						{@const selectedIntensity = workout.intensity}
+						<option selected={selectedIntensity === level} value={String(level)}
 							>{level} {drops(level)}</option
 						>
 					{/each}
