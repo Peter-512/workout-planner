@@ -55,7 +55,8 @@
 					absolute:
 						page.route.id === '/goal-setting' ||
 						page.route.id === '/add-workout' ||
-						page.route.id?.endsWith('edit')
+						page.route.id?.endsWith('edit') ||
+						page.route.id === '/plan-activities'
 				})}
 			>
 				<Breadcrumb.List>

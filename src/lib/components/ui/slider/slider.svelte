@@ -5,6 +5,8 @@
 
 	type SliderProps = WithoutChildrenOrChild<SliderPrimitive.RootProps> & {
 		goal?: number;
+		showTicks?: boolean;
+		showTickLabels?: boolean;
 	};
 
 	let {
@@ -12,6 +14,8 @@
 		value = $bindable(),
 		orientation = 'horizontal',
 		goal,
+		showTicks = true,
+		showTickLabels = true,
 		class: className,
 		...restProps
 	}: SliderProps = $props();
@@ -54,27 +58,31 @@ get along, so we shut typescript up by casting `value` to `never`.
 				class="border-primary ring-ring/50 block size-4 shrink-0 rounded-full border bg-white shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
 			/>
 		{/each}
-		{#each tickItems as { index, value } (index)}
-			{@const tickLabel = `${value} ${orientation === 'vertical' ? (value === 1 ? 'day' : 'days') : 'd'}`}
-			{@const isGoalTick = goal !== undefined && value === goal}
-			<SliderPrimitive.Tick
-				{index}
-				class={cn(
-					'dark:bg-background bg-background z-1 data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-px data-[orientation=vertical]:h-px data-[orientation=vertical]:w-4'
-				)}
-			/>
-			<SliderPrimitive.TickLabel
-				{index}
-				class={cn(
-					'text-muted-foreground data-selected:text-foreground data-[orientation=vertical]:mr-5 data-[orientation=horizontal]:mb-5 text-sm font-medium leading-none whitespace-nowrap'
-				)}
-			>
-				{#if isGoalTick}
-					<Goal class="size-6 text-primary" />
-				{:else}
-					{tickLabel}
+		{#if showTicks}
+			{#each tickItems as { index, value } (index)}
+				{@const tickLabel = `${value} ${orientation === 'vertical' ? (value === 1 ? 'day' : 'days') : 'd'}`}
+				{@const isGoalTick = goal !== undefined && value === goal}
+				<SliderPrimitive.Tick
+					{index}
+					class={cn(
+						'dark:bg-background bg-background z-1 data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-px data-[orientation=vertical]:h-px data-[orientation=vertical]:w-4'
+					)}
+				/>
+				{#if showTickLabels}
+					<SliderPrimitive.TickLabel
+						{index}
+						class={cn(
+							'text-muted-foreground data-selected:text-foreground data-[orientation=vertical]:mr-5 data-[orientation=horizontal]:mb-5 text-sm font-medium leading-none whitespace-nowrap'
+						)}
+					>
+						{#if isGoalTick}
+							<Goal class="size-6 text-primary" />
+						{:else}
+							{tickLabel}
+						{/if}
+					</SliderPrimitive.TickLabel>
 				{/if}
-			</SliderPrimitive.TickLabel>
-		{/each}
+			{/each}
+		{/if}
 	{/snippet}
 </SliderPrimitive.Root>
