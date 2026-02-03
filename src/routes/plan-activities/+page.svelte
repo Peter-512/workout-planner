@@ -32,7 +32,7 @@
 	let dateOpen = $state(true);
 	let filtersOpen = $state(false);
 
-	let ratingRange = $state<[number, number]>([1, 5]);
+	let ratingRange = $state<[number, number]>([0, 5]);
 	let intensityRange = $state<[number, number]>([1, 5]);
 	let typeFilter = $state<(typeof workoutTypes)[number] | 'all'>('all');
 	let durationSort = $state<'none' | 'asc' | 'desc'>('none');
@@ -50,8 +50,8 @@
 		const [intensityMin, intensityMax] = normalizeRange(intensityRange);
 
 		let filtered = workouts.filter((workout) => {
-			const ratingOk =
-				workout.rating != null && workout.rating >= ratingMin && workout.rating <= ratingMax;
+			const ratingValue = workout.rating ?? 0;
+			const ratingOk = ratingValue >= ratingMin && ratingValue <= ratingMax;
 			const intensityOk =
 				workout.intensity != null &&
 				workout.intensity >= intensityMin &&
@@ -116,7 +116,7 @@
 						<span class="text-xs text-muted-foreground">{ratingBounds[0]}–{ratingBounds[1]}</span>
 					</div>
 					<Slider
-						min={1}
+						min={0}
 						max={5}
 						step={1}
 						type="multiple"
@@ -124,7 +124,7 @@
 						showTicks={false}
 					/>
 					<div class="flex items-center justify-between text-xs text-muted-foreground">
-						<span>1</span>
+						<span>0</span>
 						<span>5</span>
 					</div>
 				</div>
@@ -184,7 +184,7 @@
 				<Button
 					variant="ghost"
 					onclick={() => {
-						ratingRange = [1, 5];
+						ratingRange = [0, 5];
 						intensityRange = [1, 5];
 						typeFilter = 'all';
 						durationSort = 'none';
